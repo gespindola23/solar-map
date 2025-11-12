@@ -62,13 +62,13 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-ecoloop-gray-light">
+      <div className="flex items-center justify-center h-screen bg-gray-950">
         <div className="text-center">
           <div className="relative w-20 h-20 mx-auto mb-4">
-            <div className="absolute inset-0 border-4 border-ecoloop-green/20 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-ecoloop-green border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute inset-0 border-4 border-yellow-500/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
-          <p className="text-ecoloop-navy font-medium">Loading installations...</p>
+          <p className="text-white font-medium">Loading installations...</p>
         </div>
       </div>
     );
@@ -76,11 +76,11 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-ecoloop-gray-light">
-        <div className="text-center max-w-md p-8 bg-white rounded-2xl shadow-xl">
+      <div className="flex items-center justify-center h-screen bg-gray-950">
+        <div className="text-center max-w-md p-8 bg-gray-900 rounded-2xl shadow-2xl border border-gray-800">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
-          <h2 className="text-xl font-bold text-ecoloop-navy mb-3">Configuration Error</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h2 className="text-xl font-bold text-white mb-3">Configuration Error</h2>
+          <p className="text-gray-400 mb-4">{error}</p>
           <p className="text-sm text-gray-500">
             Please check your environment variables.
           </p>
@@ -90,7 +90,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative h-screen w-screen bg-ecoloop-gray-light">
+    <main className="relative h-screen w-screen bg-gray-950">
       <Filters
         states={states}
         cities={cities}
