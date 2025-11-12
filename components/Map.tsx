@@ -12,7 +12,6 @@ interface MapProps {
 export default function Map({ installations }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
   const [mapLoaded, setMapLoaded] = useState(false);
 
   // Initialize map
@@ -51,41 +50,76 @@ export default function Map({ installations }: MapProps) {
   useEffect(() => {
     if (!map.current || !mapLoaded) return;
 
-    // Remove existing markers
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
+    // Remove old source and layer if they exist
+    if (map.current.getLayer('installations')) {
+      map.current.removeLayer('installations');
+    }
+    if (map.current.getSource('installations')) {
+      map.current.removeSource('installations');
+    }
 
-    // Add new markers
-    installations.forEach((installation) => {
-      // Create custom marker element - Simple and performant
-      const el = document.createElement('div');
-      el.className = 'pin-marker';
-      el.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 20 20">
-          <circle cx="10" cy="10" r="5" fill="#FDB813" opacity="0.9"/>
-          <circle cx="10" cy="10" r="3" fill="#FFEB3B"/>
-        </svg>
-      `;
+    // Create GeoJSON from installations
+    const geojsonData = {
+      type: 'FeatureCollection',
+      features: installations.map(installation => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [installation.displayLng, installation.displayLat]
+        },
+        properties: {
+          city: installation.city,
+          state: installation.state
+        }
+      }))
+    };
 
-      // Create popup - Simple dark style
-      const popup = new mapboxgl.Popup({
-        offset: 20,
-        closeButton: false,
-        className: 'simple-popup'
-      }).setHTML(`
-        <div class="px-3 py-2 bg-gray-900 text-white">
-          <div class="font-medium text-sm">${installation.city}, ${installation.state}</div>
-          <div class="text-xs text-gray-400 mt-0.5">Solar Installation</div>
-        </div>
-      `);
+    // Add source
+    map.current.addSource('installations', {
+      type: 'geojson',
+      data: geojsonData as any
+    });
 
-      // Create marker
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([installation.displayLng, installation.displayLat])
-        .setPopup(popup)
+    // Add circle layer
+    map.current.addLayer({
+      id: 'installations',
+      type: 'circle',
+      source: 'installations',
+      paint: {
+        'circle-radius': 8,
+        'circle-color': '#FDB813',
+        'circle-opacity': 0.9,
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#FFEB3B',
+        'circle-stroke-opacity': 0.8
+      }
+    });
+
+    // Add hover effect
+    map.current.on('mouseenter', 'installations', () => {
+      if (map.current) map.current.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.current.on('mouseleave', 'installations', () => {
+      if (map.current) map.current.getCanvas().style.cursor = '';
+    });
+
+    // Add click popup
+    map.current.on('click', 'installations', (e) => {
+      if (!e.features || !e.features[0]) return;
+      
+      const coordinates = (e.features[0].geometry as any).coordinates.slice();
+      const { city, state } = e.features[0].properties as any;
+
+      new mapboxgl.Popup({ offset: 15 })
+        .setLngLat(coordinates)
+        .setHTML(`
+          <div class="px-3 py-2 bg-gray-900 text-white">
+            <div class="font-medium text-sm">${city}, ${state}</div>
+            <div class="text-xs text-gray-400 mt-0.5">Solar Installation</div>
+          </div>
+        `)
         .addTo(map.current!);
-
-      markersRef.current.push(marker);
     });
 
     // Fit bounds to show all markers if there are any
@@ -106,15 +140,6 @@ export default function Map({ installations }: MapProps) {
   return (
     <>
       <style jsx global>{`
-        .pin-marker {
-          cursor: pointer;
-          transition: transform 0.15s ease;
-        }
-        
-        .pin-marker:hover {
-          transform: scale(1.3);
-        }
-        
         .mapboxgl-popup-content {
           padding: 0;
           border-radius: 8px;
