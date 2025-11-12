@@ -15,7 +15,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       <select
         value={filters.state}
         onChange={(e) => onFilterChange({ ...filters, state: e.target.value, city: 'all' })}
-        className="w-full px-4 py-3 bg-white/95 backdrop-blur-sm border-0 rounded-xl shadow-lg text-ecoloop-navy font-medium focus:outline-none focus:ring-2 focus:ring-ecoloop-green transition-all"
+        className="w-full px-4 py-3 bg-gray-900/80 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl text-white font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all"
       >
         <option value="all">All States</option>
         {states.map(state => (
@@ -26,7 +26,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       <select
         value={filters.city}
         onChange={(e) => onFilterChange({ ...filters, city: e.target.value })}
-        className="w-full px-4 py-3 bg-white/95 backdrop-blur-sm border-0 rounded-xl shadow-lg text-ecoloop-navy font-medium focus:outline-none focus:ring-2 focus:ring-ecoloop-green transition-all disabled:opacity-50"
+        className="w-full px-4 py-3 bg-gray-900/80 backdrop-blur-md border border-gray-700/50 rounded-xl shadow-2xl text-white font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-all disabled:opacity-50"
         disabled={cities.length === 0}
       >
         <option value="all">All Cities</option>
@@ -38,7 +38,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       {(filters.state !== 'all' || filters.city !== 'all') && (
         <button
           onClick={() => onFilterChange({ state: 'all', city: 'all' })}
-          className="w-full px-4 py-3 bg-ecoloop-green text-white rounded-xl hover:bg-ecoloop-green-dark transition-all text-sm font-semibold shadow-lg"
+          className="w-full px-4 py-3 bg-yellow-500 text-gray-900 rounded-xl hover:bg-yellow-400 transition-all text-sm font-bold shadow-2xl"
         >
           Reset Filters
         </button>
