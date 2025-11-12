@@ -30,7 +30,7 @@ export default function Map({ installations }: MapProps) {
     // Center on MA/CT/RI region
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
+      style: 'mapbox://styles/mapbox/dark-v11',
       center: [-71.8, 41.8],
       zoom: 7.5,
     });
@@ -57,29 +57,25 @@ export default function Map({ installations }: MapProps) {
 
     // Add new markers
     installations.forEach((installation) => {
-      // Create custom marker element - Ecoloop green style
+      // Create custom marker element - Golden dark style
       const el = document.createElement('div');
       el.className = 'ecoloop-marker';
       el.innerHTML = `
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="11" fill="#00B27A" class="marker-bg" opacity="0.2"/>
-          <circle cx="12" cy="12" r="8" fill="#00B27A" class="marker-pulse"/>
-          <path d="M12 3v2m0 14v2M3 12h2m14 0h2m-4.22-6.78l1.42 1.42M6.34 17.66l1.42 1.42m0-12.56L6.34 6.34m11.32 11.32l1.42 1.42M12 8a4 4 0 100 8 4 4 0 000-8z" 
-                stroke="white" 
-                stroke-width="1.8" 
-                stroke-linecap="round"/>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="#FFB800" class="marker-glow"/>
+          <circle cx="12" cy="12" r="6" fill="#FFEB3B" opacity="0.9"/>
         </svg>
       `;
 
-      // Create popup - Ecoloop style
+      // Create popup - Dark mode style
       const popup = new mapboxgl.Popup({
-        offset: 28,
+        offset: 25,
         closeButton: false,
         className: 'ecoloop-popup'
       }).setHTML(`
-        <div class="px-4 py-3">
-          <div class="font-semibold text-ecoloop-navy text-base">${installation.city}, ${installation.state}</div>
-          <div class="text-sm text-gray-500 mt-1">Solar Installation</div>
+        <div class="px-4 py-3 bg-gray-900 text-white">
+          <div class="font-semibold text-base">${installation.city}, ${installation.state}</div>
+          <div class="text-sm text-gray-400 mt-1">Solar Installation</div>
         </div>
       `);
 
@@ -113,37 +109,39 @@ export default function Map({ installations }: MapProps) {
         .ecoloop-marker {
           cursor: pointer;
           transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+          filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6));
         }
         
         .ecoloop-marker:hover {
-          transform: scale(1.15);
+          transform: scale(1.2);
           z-index: 1;
+          filter: drop-shadow(0 0 16px rgba(255, 235, 59, 0.9));
         }
         
-        .marker-pulse {
-          animation: ecopulse 2.5s ease-in-out infinite;
+        .marker-glow {
+          animation: goldpulse 2s ease-in-out infinite;
         }
         
-        @keyframes ecopulse {
+        @keyframes goldpulse {
           0%, 100% {
-            opacity: 1;
-            transform: scale(1);
+            opacity: 0.8;
           }
           50% {
-            opacity: 0.6;
-            transform: scale(1.05);
+            opacity: 1;
+            filter: drop-shadow(0 0 4px rgba(255, 235, 59, 0.8));
           }
         }
         
         .mapboxgl-popup-content {
           padding: 0;
           border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 178, 122, 0.15);
-          border: 1px solid rgba(0, 178, 122, 0.1);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(255, 184, 0, 0.2);
+          background: #1a1a1a !important;
         }
         
         .mapboxgl-popup-tip {
-          border-top-color: white;
+          border-top-color: #1a1a1a !important;
         }
       `}</style>
       <div ref={mapContainer} className="w-full h-full" />
