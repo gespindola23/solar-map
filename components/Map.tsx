@@ -57,25 +57,25 @@ export default function Map({ installations }: MapProps) {
 
     // Add new markers
     installations.forEach((installation) => {
-      // Create custom marker element - Golden dark style
+      // Create custom marker element - Simple and performant
       const el = document.createElement('div');
-      el.className = 'ecoloop-marker';
+      el.className = 'pin-marker';
       el.innerHTML = `
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="#FFB800" class="marker-glow"/>
-          <circle cx="12" cy="12" r="6" fill="#FFEB3B" opacity="0.9"/>
+        <svg width="20" height="20" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="5" fill="#FDB813" opacity="0.9"/>
+          <circle cx="10" cy="10" r="3" fill="#FFEB3B"/>
         </svg>
       `;
 
-      // Create popup - Dark mode style
+      // Create popup - Simple dark style
       const popup = new mapboxgl.Popup({
-        offset: 25,
+        offset: 20,
         closeButton: false,
-        className: 'ecoloop-popup'
+        className: 'simple-popup'
       }).setHTML(`
-        <div class="px-4 py-3 bg-gray-900 text-white">
-          <div class="font-semibold text-base">${installation.city}, ${installation.state}</div>
-          <div class="text-sm text-gray-400 mt-1">Solar Installation</div>
+        <div class="px-3 py-2 bg-gray-900 text-white">
+          <div class="font-medium text-sm">${installation.city}, ${installation.state}</div>
+          <div class="text-xs text-gray-400 mt-0.5">Solar Installation</div>
         </div>
       `);
 
@@ -106,37 +106,19 @@ export default function Map({ installations }: MapProps) {
   return (
     <>
       <style jsx global>{`
-        .ecoloop-marker {
+        .pin-marker {
           cursor: pointer;
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-          filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6));
+          transition: transform 0.15s ease;
         }
         
-        .ecoloop-marker:hover {
-          transform: scale(1.2);
-          z-index: 1;
-          filter: drop-shadow(0 0 16px rgba(255, 235, 59, 0.9));
-        }
-        
-        .marker-glow {
-          animation: goldpulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes goldpulse {
-          0%, 100% {
-            opacity: 0.8;
-          }
-          50% {
-            opacity: 1;
-            filter: drop-shadow(0 0 4px rgba(255, 235, 59, 0.8));
-          }
+        .pin-marker:hover {
+          transform: scale(1.3);
         }
         
         .mapboxgl-popup-content {
           padding: 0;
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-          border: 1px solid rgba(255, 184, 0, 0.2);
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
           background: #1a1a1a !important;
         }
         
