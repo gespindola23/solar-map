@@ -32,6 +32,14 @@ export async function fetchInstallations(): Promise<Installation[]> {
 
   // Google Sheets CSV export URL
   const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+  
+  // State normalization map
+  const stateMap: { [key: string]: string } = {
+    'MA': 'Massachusetts',
+    'CT': 'Connecticut',
+    'RI': 'Rhode Island',
+    'NH': 'New Hampshire'
+  };
 
   try {
     const response = await fetch(csvUrl, {
@@ -68,11 +76,15 @@ export async function fetchInstallations(): Promise<Installation[]> {
 
               // Add privacy offset
               const { lat: displayLat, lng: displayLng } = addPrivacyOffset(lat, lng, PRIVACY_OFFSET);
+              
+              // Normalize state name
+              const rawState = row['State'] || '';
+              const normalizedState = stateMap[rawState] || rawState;
 
               installations.push({
                 address: row['Street Address'] || '',
                 city: row['City'] || '',
-                state: row['State'] || '',
+                state: normalizedState,
                 latitude: lat,
                 longitude: lng,
                 displayLat,
@@ -97,7 +109,20 @@ export async function fetchInstallations(): Promise<Installation[]> {
 }
 
 export function getUniqueStates(installations: Installation[]): string[] {
-  const states = new Set(installations.map(i => i.state).filter(Boolean));
+  const stateMap: { [key: string]: string } = {
+    'MA': 'Massachusetts',
+    'CT': 'Connecticut',
+    'RI': 'Rhode Island',
+    'NH': 'New Hampshire'
+  };
+  
+  const states = new Set(
+    installations
+      .map(i => i.state)
+      .filter(Boolean)
+      .map(state => stateMap[state] || state)
+  );
+  
   return Array.from(states).sort();
 }
 
