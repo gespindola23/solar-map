@@ -87,10 +87,10 @@ export default function Map({ installations }: MapProps) {
       source: 'installations',
       paint: {
         'circle-radius': 8,
-        'circle-color': '#FDB813',
+        'circle-color': '#00CED1',
         'circle-opacity': 0.9,
         'circle-stroke-width': 2,
-        'circle-stroke-color': '#FFEB3B',
+        'circle-stroke-color': '#5DFDCB',
         'circle-stroke-opacity': 0.8
       }
     });
