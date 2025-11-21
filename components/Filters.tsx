@@ -15,7 +15,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       <select
         value={filters.state}
         onChange={(e) => onFilterChange({ ...filters, state: e.target.value, city: 'all' })}
-        className="w-full px-4 py-2.5 bg-gray-900/90 border border-gray-700 rounded-lg shadow-lg text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors"
+        className="w-full px-4 py-2.5 bg-gray-900/90 border border-gray-700 rounded-lg shadow-lg text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors"
       >
         <option value="all">All States</option>
         {states.map(state => (
@@ -26,7 +26,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       <select
         value={filters.city}
         onChange={(e) => onFilterChange({ ...filters, city: e.target.value })}
-        className="w-full px-4 py-2.5 bg-gray-900/90 border border-gray-700 rounded-lg shadow-lg text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors disabled:opacity-50"
+        className="w-full px-4 py-2.5 bg-gray-900/90 border border-gray-700 rounded-lg shadow-lg text-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors disabled:opacity-50"
         disabled={cities.length === 0}
       >
         <option value="all">All Cities</option>
@@ -38,7 +38,7 @@ export default function Filters({ states, cities, filters, onFilterChange }: Fil
       {(filters.state !== 'all' || filters.city !== 'all') && (
         <button
           onClick={() => onFilterChange({ state: 'all', city: 'all' })}
-          className="w-full px-4 py-2.5 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-400 transition-colors text-sm font-bold shadow-lg"
+          className="w-full px-4 py-2.5 bg-cyan-500 text-white rounded-lg hover:bg-cyan-400 transition-colors text-sm font-bold shadow-lg"
         >
           Reset
         </button>
